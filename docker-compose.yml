@@ -1,0 +1,46 @@
+services:
+
+  db:
+    container_name: postgres_container_shop
+    image: postgres
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      PGDATA: /var/lib/postgresql/data
+      POSTGRES_DB: one_stop_shop
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      shop_network:
+        ipv4_address: 192.168.0.2
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4
+    restart: always
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "8088:80"
+    networks:
+      shop_network:
+        ipv4_address: 192.168.0.3
+
+volumes:
+  pgdata:
+    driver: local
+  pgadmin-data:
+
+networks:
+  shop_network:
+    ipam:
+      driver: default
+      config:
+        - subnet: "192.168.0.0/24"
+          gateway: 192.168.0.1
