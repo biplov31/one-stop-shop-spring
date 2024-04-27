@@ -1,6 +1,13 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/one_stop_shop
-    username: admin
-    password: password
-    driver-class-name: org.postgresql.Driver
+    username: root
+    password: root
+  sql:
+    init:
+      mode: always
+  flyway:
+    baseline-on-migrate: true
+logging:
+  level:
+    sql: DEBUG

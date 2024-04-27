@@ -1,7 +1,7 @@
 services:
 
   db:
-    container_name: postgres_container_shop
+    container_name: shop_postgres_container
     image: postgres
     environment:
       POSTGRES_USER: root
@@ -15,10 +15,10 @@ services:
     networks:
       shop_network:
         ipv4_address: 192.168.0.2
-    restart: unless-stopped
+    restart: always
 
   pgadmin:
-    container_name: pgadmin4_container
+    container_name: shop_pgadmin4_container
     image: dpage/pgadmin4
     restart: always
     volumes:
@@ -36,6 +36,7 @@ volumes:
   pgdata:
     driver: local
   pgadmin-data:
+    driver: local
 
 networks:
   shop_network:
