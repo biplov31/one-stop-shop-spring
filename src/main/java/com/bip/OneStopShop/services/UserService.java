@@ -1,21 +1,19 @@
 package com.bip.OneStopShop.services;
 
-import com.bip.OneStopShop.models.User;
-import com.bip.OneStopShop.repositories.UserRepository;
-import org.springframework.stereotype.Service;
+import com.bip.OneStopShop.models.dtos.UserDto;
+import com.bip.OneStopShop.models.dtos.UserResponseDto;
 
 import java.util.List;
 
-@Service
-public class UserService {
+public interface UserService {
 
-    private final UserRepository userRepository;
+    List<UserResponseDto> findUsers();
 
-    public UserService(UserRepository repository) {
-        this.userRepository = repository;
-    }
+    UserResponseDto findUserById(Integer id);
 
-    public List<User> getUsers() {
-        return userRepository.findAll();
-    }
+    UserResponseDto saveUser(UserDto userDto);
+
+    UserResponseDto updateUser(Integer id, UserDto userDto);
+
+    void deleteUser(Integer id);
 }

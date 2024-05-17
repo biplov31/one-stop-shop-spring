@@ -12,7 +12,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jdbc.core.mapping.AggregateReference;
+import org.springframework.data.relational.core.sql.In;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLOutput;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,18 +27,23 @@ public class OneStopShopApplication {
 	}
 
 	@Bean
+	@Transactional
 	CommandLineRunner commandLineRunner(UserRepository users, ProductRepository products) {
 		return args -> {
-			AggregateReference<User, Integer> johnRef = AggregateReference.to(users.save(new User("John", "Doe", "john123", "john7@gmail.com")).getId());
-
-			Set<Review> jacketReviews = new HashSet<>();
-			Review firstReview = new Review("Great jacket!", johnRef);
-			jacketReviews.add(firstReview);
-			Product jacket = new Product("Dapxy Jacket", "A torquise-colored puffer jacket.", 40.12, ProductCategory.MENS_CLOTHING.toString(), jacketReviews);
-			products.save(jacket);
-
-			Product jacketReloaded = products.findById(jacket.getId()).get();
-			System.out.println(jacketReloaded);
+			// AggregateReference<User, Integer> jimRef = AggregateReference.to(users.save(new User("Jim", "Jones", "jim123", "jim6@gmail.com")).getId());
+			// AggregateReference<User, Integer> jimRef = AggregateReference.to(users.findById(12).get().getId()); // .get() is for Optional and .getId() to get the actual ID of a record
+			//
+			// Set<Review> jacketReviews = new HashSet<>();
+			// Review firstReview = new Review("Nice, lightweight windcheater!!", jimRef);
+			// jacketReviews.add(firstReview);
+			//
+			// // Product jacket = new Product("Kathmandu windcheater", "A lightweight water-resistant windcheater.", 50.62, ProductCategory.MENS_CLOTHING.toString(), jacketReviews);
+			// Product jacket = products.findById(8).orElse(null);
+			// jacket.setReviews(jacketReviews);
+			// products.save(jacket);
+			//
+			// Product jacketReloaded = products.findById(jacket.getId()).get();
+			// System.out.println(jacketReloaded);
 		};
 	}
 }

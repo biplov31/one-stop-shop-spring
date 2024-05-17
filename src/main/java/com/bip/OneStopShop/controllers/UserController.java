@@ -1,23 +1,48 @@
 package com.bip.OneStopShop.controllers;
 
-import com.bip.OneStopShop.models.User;
-import com.bip.OneStopShop.services.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.bip.OneStopShop.models.dtos.UserDto;
+import com.bip.OneStopShop.models.dtos.UserResponseDto;
+import com.bip.OneStopShop.services.impl.UserServiceImpl;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("user")
 public class UserController {
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
-    public UserController(UserService service) {
+    public UserController(UserServiceImpl service) {
         this.userService = service;
     }
 
-    @GetMapping("/users")
-    public List<User> getUsers() {
-        return userService.getUsers();
+    @GetMapping
+    public List<UserResponseDto> getUsers() {
+        return userService.findUsers();
     }
+
+    @GetMapping("/{id}")
+    public UserResponseDto getUserById(@PathVariable Integer id) {
+        return userService.findUserById(id);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public UserResponseDto postUser(@Valid @RequestBody UserDto userDto) {
+        return userService.saveUser(userDto);
+    }
+
+    @PutMapping("/{id}")
+    public UserResponseDto updateUser(@PathVariable Integer id, @Valid @RequestBody UserDto userDto) {
+        return userService.updateUser(id, userDto);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable Integer id) {
+        userService.deleteUser(id);
+    }
+
 }

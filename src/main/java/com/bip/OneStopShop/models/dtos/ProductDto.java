@@ -1,55 +1,30 @@
-package com.bip.OneStopShop.models;
+package com.bip.OneStopShop.models.dtos;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import org.springframework.data.annotation.Id;
+import com.bip.OneStopShop.models.Review;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-public class Product {
+public class ProductDto {
 
-    @Id
-    private Integer id;
-    @NotBlank
     private String title;
     private String description;
-    @NotNull
     private Double price;
     private String category;
-    private Set<Review> reviews = new HashSet<>();
+    // private Set<Review> reviews = new HashSet<>();
+    private Review review;
 
-    public Product() {
-        this.id = null;
+    public ProductDto() {
     }
 
-    public Product(String title, String description, Double price, String category, Set<Review> reviews) {
+    public ProductDto(String title, String description, Double price, String category, Review review) {
         this.title = title;
         this.description = description;
         this.price = price;
         this.category = category;
-        reviews.forEach(this::addReview);
-    }
-
-    public void addReview(Review review) {
-        reviews.add(review);
-        review.product = this;
-    }
-
-    public Set<Review> getReviews() {
-        return this.reviews;
-    }
-
-    public void setReviews(Set<Review> reviews) {
-        reviews.forEach(this::addReview);
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
+        this.review = review;
     }
 
     public String getTitle() {
@@ -84,15 +59,22 @@ public class Product {
         this.category = category;
     }
 
+    public Review getReview() {
+        return review;
+    }
+
+    public void setReview(Review review) {
+        this.review = review;
+    }
+
     @Override
     public String toString() {
-        return "Product{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
+        return "ProductDto{" +
+                "title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", price=" + price +
                 ", category='" + category + '\'' +
-                ", reviews=" + reviews +
+                ", review=" + review +
                 '}';
     }
 }

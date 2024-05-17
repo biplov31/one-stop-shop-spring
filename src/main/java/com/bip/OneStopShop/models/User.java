@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.cglib.core.Local;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDate;
@@ -12,24 +13,29 @@ import java.time.LocalDateTime;
 
 @Table("user_account")
 public class User {
+
     @Id
     private Integer id;
-    @NotBlank
+    // @NotBlank
     private String firstname;
-    @NotBlank
+    // @NotBlank
     private String lastname;
-    @NotNull
+    // @NotNull
     private String password;
-    @Email
+    // @Email
     private String email;
     @NotNull
     private LocalDate createdOn;
-    // @NotBlank
-    // private String phoneNumber;
+
     // private String address;
     // private Boolean accountNonLocked;
     // private Boolean accountNonExpired;
     // private Boolean enabled;
+
+    public User() {
+        this.id = null;
+        this.createdOn = LocalDate.now();
+    }
 
     public User(String firstname, String lastname, String password, String email) {
         this.firstname = firstname;
@@ -43,8 +49,20 @@ public class User {
         return id;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
     public void setFirstname(String firstname) {
         this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
     }
 
     public void setLastname(String lastname) {
@@ -110,4 +128,17 @@ public class User {
     // public void setEnabled(Boolean enabled) {
     //     this.enabled = enabled;
     // }
+
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", createdOn=" + createdOn +
+                '}';
+    }
 }
