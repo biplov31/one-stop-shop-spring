@@ -1,5 +1,6 @@
 package com.bip.OneStopShop.services.impl;
 
+import com.bip.OneStopShop.exceptions.ProductNotFoundException;
 import com.bip.OneStopShop.models.Product;
 import com.bip.OneStopShop.models.User;
 import com.bip.OneStopShop.models.dtos.ProductDetailDto;
@@ -34,10 +35,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public ProductDetailDto findProductById(Integer id) {
-        Product product = productRepository.findById(id).orElse(null);
-        if (product == null) {
-            return null;
-        }
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException("Product does not exist."));
 
         Map<String, String> reviews = new LinkedHashMap<>();
         product.getReviews().forEach((review -> {
@@ -65,6 +64,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public ProductDto updateProduct(Integer id, ProductDto productDto) {
+        if(!productRepository.existsById(id)) {
+            throw new ProductNotFoundException("Product does not exist.");
+        }
         Product productToUpdate = productMapper.convertProductDtoToProduct(productDto);
         productToUpdate.setId(id);
         Product updatedProduct = productRepository.save(productToUpdate);
@@ -72,6 +74,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public void deleteProduct(Integer id) {
+        if (!productRepository.existsById(id)) {
+            throw new ProductNotFoundException("Product does not exist.");
+        }
         productRepository.deleteById(id);
     }
 

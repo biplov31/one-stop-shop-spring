@@ -1,5 +1,6 @@
 package com.bip.OneStopShop.services.impl;
 
+import com.bip.OneStopShop.exceptions.UserNotFoundException;
 import com.bip.OneStopShop.models.User;
 import com.bip.OneStopShop.models.dtos.UserDto;
 import com.bip.OneStopShop.models.dtos.UserResponseDto;
@@ -30,7 +31,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserResponseDto findUserById(Integer id) {
-        User user = userRepository.findById(id).orElse(null);
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User does not exist."));
         return userMapper.convertUserToUserResponseDto(user);
     }
 
@@ -41,6 +42,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserResponseDto updateUser(Integer id, UserDto userDto) {
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User does not exist."));
         User userToUpdate = userMapper.convertUserDtoToUser(userDto);
         userToUpdate.setId(id);
         User updatedUser = userRepository.save(userToUpdate);
@@ -48,6 +50,9 @@ public class UserServiceImpl implements UserService {
     }
 
     public void deleteUser(Integer id) {
+        if (!userRepository.existsById(id)) {
+            throw new UserNotFoundException("User does not exist.");
+        }
         userRepository.deleteById(id);
     }
 }

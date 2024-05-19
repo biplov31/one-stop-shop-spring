@@ -3,6 +3,7 @@ package com.bip.OneStopShop.models;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
 
 import java.util.HashSet;
 import java.util.Set;
