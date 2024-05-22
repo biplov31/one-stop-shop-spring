@@ -35,4 +35,17 @@ public class GlobalExceptionHandler {
         );
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(value = {CartException.class})
+    public ResponseEntity<Object> handleCartNotFoundException(CartException cartNotFoundException) {
+        logger.error(cartNotFoundException.getMessage());
+
+        ExceptionResponse exceptionResponse = new ExceptionResponse(
+                cartNotFoundException.getMessage(),
+                cartNotFoundException.getCause(),
+                HttpStatus.NOT_FOUND
+        );
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
+
 }

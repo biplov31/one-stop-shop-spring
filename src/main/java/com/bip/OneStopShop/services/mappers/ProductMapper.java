@@ -21,7 +21,10 @@ public class ProductMapper {
         product.setPrice(productDto.getPrice());
         product.setCategory(productDto.getCategory());
         // product.setReviews(productDto.getReviews());
-        product.addReview(productDto.getReview());
+
+        if (productDto.getReview() != null) {
+            product.addReview(productDto.getReview());
+        }
 
         // convert int value to AggregateReference of userId
         // Review review = new Review();

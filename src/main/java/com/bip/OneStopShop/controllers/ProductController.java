@@ -46,7 +46,7 @@ public class ProductController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ProductDto postProduct(@Valid @RequestBody ProductDto productDto) {
-        logger.info(productDto.toString());
+        // logger.info(productDto.toString());
         // AggregateReference<User, Integer> userId = productDto.getReview().getUserId();
         return productService.saveProduct(productDto);
     }

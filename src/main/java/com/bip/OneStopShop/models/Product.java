@@ -24,7 +24,17 @@ public class Product {
         this.id = null;
     }
 
+    public Product(Integer id, String title, String description, Double price, String category) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.price = price;
+        this.category = category;
+        this.reviews = null;
+    }
+
     public Product(String title, String description, Double price, String category, Set<Review> reviews) {
+        this.id = null;
         this.title = title;
         this.description = description;
         this.price = price;

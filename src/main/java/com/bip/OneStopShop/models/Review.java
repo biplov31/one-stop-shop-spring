@@ -1,6 +1,7 @@
 package com.bip.OneStopShop.models;
 
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.jdbc.core.mapping.AggregateReference;
 
@@ -8,6 +9,8 @@ import java.time.LocalDate;
 
 public class Review {
 
+    @Id
+    private Integer id;
     @NotBlank
     private String content;
     private LocalDate createdOn;
@@ -18,6 +21,7 @@ public class Review {
     Product product;
 
     public Review() {
+        this.id = null;
         this.createdOn = LocalDate.now();
     }
 
@@ -26,6 +30,14 @@ public class Review {
         // AggregateReference<User, Integer> userRef = AggregateReference.to(userId);
         this.userId = userId;
         this.createdOn = LocalDate.now();
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getContent() {

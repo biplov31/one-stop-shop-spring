@@ -80,6 +80,7 @@ public class ProductServiceImpl implements ProductService {
         productRepository.deleteById(id);
     }
 
+    // Should Review be a separate aggregate because we need to create and delete it separately?
     // public void deleteReview(Integer productId, Integer userId) {
     //
     // }

@@ -19,6 +19,13 @@ public class ProductDto {
     public ProductDto() {
     }
 
+    public ProductDto(String title, String description, Double price, String category) {
+        this.title = title;
+        this.description = description;
+        this.price = price;
+        this.category = category;
+    }
+
     public ProductDto(String title, String description, Double price, String category, Review review) {
         this.title = title;
         this.description = description;
