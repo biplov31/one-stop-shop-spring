@@ -1,29 +1,3 @@
--- User table
---create table if not exists user_account (
---    id serial primary key,
---    firstname varchar(255) not null,
---    lastname varchar(255) not null,
---    password varchar(255) not null,
---    email varchar(255) unique,
---    created_on date default current_date
---);
-
--- Product category
---create table if not exists product_category (
---    id serial primary key,
---    name varchar(255) not null
---);
-
--- Product table
---create table if not exists product (
---    id serial primary key,
---    title varchar(255) not null,
---    description text not null,
---    price numeric not null,
---    category varchar(100)
-----    category_id integer references product_category(id)
---);
-
 alter table review
     add column id serial primary key;
 
@@ -38,7 +12,11 @@ alter table review
 --);
 
 alter table user_order
-    add column quantity integer default 1 not null;
+    alter column user_id set not null,
+    alter column product_id set not null,
+    add column quantity integer default 1 not null,
+    alter column created_on set not null,
+    alter column created_on set default current_date;
 
 -- Order table
 --create table if not exists user_order (

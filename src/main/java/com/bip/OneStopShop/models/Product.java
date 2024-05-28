@@ -69,7 +69,7 @@ public class Product {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(@NotBlank String title) {
         this.title = title;
     }
 
@@ -85,7 +85,7 @@ public class Product {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(@NotNull Double price) {
         this.price = price;
     }
 

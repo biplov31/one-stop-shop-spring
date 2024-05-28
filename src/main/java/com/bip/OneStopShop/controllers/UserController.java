@@ -2,6 +2,7 @@ package com.bip.OneStopShop.controllers;
 
 import com.bip.OneStopShop.models.dtos.UserDto;
 import com.bip.OneStopShop.models.dtos.UserResponseDto;
+import com.bip.OneStopShop.services.UserService;
 import com.bip.OneStopShop.services.impl.UserServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -13,9 +14,9 @@ import java.util.List;
 @RequestMapping("user")
 public class UserController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
-    public UserController(UserServiceImpl service) {
+    public UserController(UserService service) {
         this.userService = service;
     }
 

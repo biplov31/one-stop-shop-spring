@@ -5,6 +5,7 @@ import com.bip.OneStopShop.models.CartItem;
 import com.bip.OneStopShop.models.dtos.CartItemDto;
 import com.bip.OneStopShop.models.dtos.CartItemResponseDto;
 import com.bip.OneStopShop.models.dtos.CartListDto;
+import com.bip.OneStopShop.services.CartService;
 import com.bip.OneStopShop.services.impl.CartServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,9 +18,9 @@ import java.util.List;
 @RequestMapping("/cart")
 public class CartController {
 
-    private final CartServiceImpl cartService;
+    private final CartService cartService;
 
-    public CartController(CartServiceImpl cartService) {
+    public CartController(CartService cartService) {
         this.cartService = cartService;
     }
 

@@ -4,6 +4,7 @@ import com.bip.OneStopShop.models.Product;
 import com.bip.OneStopShop.models.User;
 import com.bip.OneStopShop.models.dtos.ProductDetailDto;
 import com.bip.OneStopShop.models.dtos.ProductDto;
+import com.bip.OneStopShop.services.ProductService;
 import com.bip.OneStopShop.services.impl.ProductServiceImpl;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -19,10 +20,10 @@ import java.util.List;
 @RequestMapping("/product")
 public class ProductController {
 
-    private final ProductServiceImpl productService;
+    private final ProductService productService;
     Logger logger = LoggerFactory.getLogger(ProductController.class);
 
-    public ProductController(ProductServiceImpl productService) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
     }
 

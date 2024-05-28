@@ -46,7 +46,7 @@ public class Review {
         return content;
     }
 
-    public void setContent(String content) {
+    public void setContent(@NotBlank String content) {
         this.content = content;
     }
 

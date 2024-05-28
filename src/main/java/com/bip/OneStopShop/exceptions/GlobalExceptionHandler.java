@@ -48,4 +48,16 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(value = {OrderNotFoundException.class})
+    public ResponseEntity<Object> handleOrderNotFoundException(OrderNotFoundException orderNotFoundException) {
+        logger.error(orderNotFoundException.getMessage());
+
+        ExceptionResponse exceptionResponse = new ExceptionResponse(
+                orderNotFoundException.getMessage(),
+                orderNotFoundException.getCause(),
+                HttpStatus.NOT_FOUND
+        );
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
+
 }

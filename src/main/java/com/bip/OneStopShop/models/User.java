@@ -57,7 +57,7 @@ public class User {
         return firstname;
     }
 
-    public void setFirstname(String firstname) {
+    public void setFirstname(@NotBlank String firstname) {
         this.firstname = firstname;
     }
 
@@ -65,7 +65,7 @@ public class User {
         return lastname;
     }
 
-    public void setLastname(String lastname) {
+    public void setLastname(@NotBlank String lastname) {
         this.lastname = lastname;
     }
 
@@ -77,7 +77,7 @@ public class User {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(@NotNull String password) {
         this.password = password;
     }
 
@@ -85,7 +85,7 @@ public class User {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(@Email String email) {
         this.email = email;
     }
 
