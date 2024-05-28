@@ -4,10 +4,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.relational.core.mapping.Table;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@Table("product") // without this annotation there's an error when testing: Table "PRODUCT" not found (candidates are: "product"); SQL statement: INSERT INTO "PRODUCT" ("CATEGORY", "DESCRIPTION", "PRICE", "TITLE") VALUES (?, ?, ?, ?)
 public class Product {
 
     @Id
@@ -24,8 +26,8 @@ public class Product {
         this.id = null;
     }
 
-    public Product(Integer id, String title, String description, Double price, String category) {
-        this.id = id;
+    public Product(String title, String description, Double price, String category) {
+        this.id = null;
         this.title = title;
         this.description = description;
         this.price = price;

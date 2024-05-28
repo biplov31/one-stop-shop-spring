@@ -28,7 +28,7 @@ public class OneStopShopApplication {
 
 	@Bean
 	@Transactional
-	CommandLineRunner commandLineRunner(UserRepository users, ProductRepository products) {
+	CommandLineRunner commandLineRunner() {
 		return args -> {
 			// AggregateReference<User, Integer> jimRef = AggregateReference.to(users.save(new User("Jim", "Jones", "jim123", "jim6@gmail.com")).getId());
 			// AggregateReference<User, Integer> jimRef = AggregateReference.to(users.findById(12).get().getId()); // .get() is for Optional and .getId() to get the actual ID of a record

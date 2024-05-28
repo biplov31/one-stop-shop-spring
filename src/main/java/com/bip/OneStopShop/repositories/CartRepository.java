@@ -18,7 +18,7 @@ public interface CartRepository extends ListCrudRepository<CartItem, Integer> {
     Boolean existsByUserIdAndProductId(Integer userId, Integer productId);
 
     @Modifying
-    @Query("delete from cart where cart_item_id = :cartItemId")
+    @Query("delete from \"cart\" where cart_item_id = :cartItemId") // when testing with H2, we need to make it explicit that the table name is all lowercase hence the double quotes
     void deleteByCartItemId(Integer cartItemId);
 
     // @Modifying

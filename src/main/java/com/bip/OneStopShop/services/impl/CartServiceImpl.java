@@ -1,7 +1,6 @@
 package com.bip.OneStopShop.services.impl;
 
 import com.bip.OneStopShop.exceptions.CartException;
-import com.bip.OneStopShop.exceptions.ProductNotFoundException;
 import com.bip.OneStopShop.models.CartItem;
 import com.bip.OneStopShop.models.Product;
 import com.bip.OneStopShop.models.dtos.CartItemDto;
@@ -59,7 +58,6 @@ public class CartServiceImpl implements CartService {
         if (existingItem != null) {
             Integer existingQuantity = existingItem.getQuantity();
             existingItem.setQuantity(existingQuantity + cartItemDto.getQuantity());
-
             cartRepository.save(existingItem);
         } else {
             cartRepository.save(cartItemMapper.convertToCartItem(cartItemDto));

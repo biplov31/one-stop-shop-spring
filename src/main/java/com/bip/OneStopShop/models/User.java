@@ -16,15 +16,14 @@ public class User {
 
     @Id
     private Integer id;
-    // @NotBlank
+    @NotBlank
     private String firstname;
-    // @NotBlank
+    @NotBlank
     private String lastname;
-    // @NotNull
-    private String password;
-    // @Email
+    @Email
     private String email;
     @NotNull
+    private String password;
     private LocalDate createdOn;
 
     // private String address;
@@ -41,8 +40,8 @@ public class User {
         this.id = null;
         this.firstname = firstname;
         this.lastname = lastname;
-        this.password = password;
         this.email = email;
+        this.password = password;
         this.createdOn = LocalDate.now();
     }
 
