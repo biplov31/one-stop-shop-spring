@@ -28,11 +28,12 @@ create table if not exists "review" (
 );
 
 -- Order table
+drop table if exists "user_order";
 create table if not exists "user_order" (
     id serial primary key,
     user_id integer references "user_account"(id),
     product_id integer references "product"(id),
-    created_on date default current_date,
+    created_at timestamp default current_timestamp,
     quantity integer default 1 not null
 );
 

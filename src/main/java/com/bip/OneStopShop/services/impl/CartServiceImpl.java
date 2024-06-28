@@ -39,12 +39,10 @@ public class CartServiceImpl implements CartService {
             throw new CartException("User or cart doesn't exist.");
         }
 
+        // N + 1 queries; can be solved with a single SQL join
         List<CartItemResponseDto> cartItemResponseDtos = cartItems.stream().map(item -> {
             Product product = productRepository.findById(item.getProductId()).orElse(null);
             ProductDto productDto = productMapper.convertProductToProductDto(product);
-            // CartItemResponseDto cartItemResponseDto = new CartItemResponseDto();
-            // cartItemResponseDto.setProductDto(productDto);
-            // cartItemResponseDto.setQuantity(item.getQuantity());
 
             return cartItemMapper.convertToCartItemResponseDto(item, productDto);
         }).collect(Collectors.toList());

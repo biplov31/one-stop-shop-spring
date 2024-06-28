@@ -8,6 +8,11 @@ public class OrderListDto {
     private List<OrderItemResponseDto> orderItemResponseDtoList;
     private Double cost;
 
+    public OrderListDto(List<OrderItemResponseDto> orderItemResponseDtoList, Double cost) {
+        this.orderItemResponseDtoList = orderItemResponseDtoList;
+        this.cost = cost;
+    }
+
     public OrderListDto(UserResponseDto userResponseDto, List<OrderItemResponseDto> orderItemResponseDtoList, Double cost) {
         this.userResponseDto = userResponseDto;
         this.orderItemResponseDtoList = orderItemResponseDtoList;

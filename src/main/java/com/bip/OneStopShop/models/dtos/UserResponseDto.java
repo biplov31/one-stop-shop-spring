@@ -9,6 +9,12 @@ public class UserResponseDto {
     public UserResponseDto() {
     }
 
+    public UserResponseDto(String firstname, String lastname, String email) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+    }
+
     public String getFirstname() {
         return firstname;
     }

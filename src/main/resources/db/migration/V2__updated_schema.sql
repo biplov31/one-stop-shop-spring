@@ -15,8 +15,12 @@ alter table user_order
     alter column user_id set not null,
     alter column product_id set not null,
     add column quantity integer default 1 not null,
+    alter column created_on type timestamp,
     alter column created_on set not null,
-    alter column created_on set default current_date;
+    alter column created_on set default current_timestamp;
+
+alter table user_order
+    rename column created_on to created_at;
 
 -- Order table
 --create table if not exists user_order (
@@ -24,7 +28,7 @@ alter table user_order
 --    user_id integer not null,
 --    product_id integer not null,
 --    quantity integer not null,
---    created_on date default current_date,
+--    created_at timestamp default current_timestamp,
 --    primary key (id), -- we may need to identify orders separately for similar orders made on different dates
 --    foreign key (user_id) references user_account(id),
 --    foreign key (product_id) references product(id)

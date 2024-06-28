@@ -2,33 +2,28 @@ package com.bip.OneStopShop.models;
 
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.time.LocalDate;
-
-@Table("user_order")
+@Table("order_item")
 public class OrderItem {
 
     @Id
     private Integer id;
-    @NotNull
-    private Integer userId;
+    @Transient
+    Order order;
     @NotNull
     private Integer productId;
     @NotNull
     private Integer quantity;
-    private LocalDate createdOn;
     // private Integer cartItemId;
 
     public OrderItem() {
     }
 
-    public OrderItem(Integer id, Integer userId, Integer productId, Integer quantity) {
-        this.id = id;
-        this.userId = userId;
+    public OrderItem(Integer productId, Integer quantity) {
         this.productId = productId;
         this.quantity = quantity;
-        this.createdOn = LocalDate.now();
     }
 
     public Integer getId() {
@@ -37,14 +32,6 @@ public class OrderItem {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public @NotNull Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(@NotNull Integer userId) {
-        this.userId = userId;
     }
 
     public @NotNull Integer getProductId() {
@@ -61,14 +48,6 @@ public class OrderItem {
 
     public void setQuantity(@NotNull Integer quantity) {
         this.quantity = quantity;
-    }
-
-    public LocalDate getCreatedOn() {
-        return createdOn;
-    }
-
-    public void setCreatedOn() {
-        this.createdOn = LocalDate.now();
     }
 
 }

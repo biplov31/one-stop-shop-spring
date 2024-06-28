@@ -1,5 +1,6 @@
 package com.bip.OneStopShop.controllers;
 
+import com.bip.OneStopShop.models.dtos.OrderDto;
 import com.bip.OneStopShop.models.dtos.OrderItemDto;
 import com.bip.OneStopShop.models.dtos.OrderItemResponseDto;
 import com.bip.OneStopShop.models.dtos.OrderListDto;
@@ -27,13 +28,13 @@ public class OrderController {
     }
 
     @GetMapping("/{orderId}")
-    public ResponseEntity<OrderItemResponseDto> getOrderById(@PathVariable Integer orderId) {
+    public ResponseEntity<OrderListDto> getOrderById(@PathVariable Integer orderId) {
         return new ResponseEntity<>(orderService.findOrderById(orderId), HttpStatus.OK);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public OrderItemDto placeOrder(@Valid @RequestBody OrderItemDto orderDto) {
+    public OrderListDto placeOrder(@Valid @RequestBody OrderDto orderDto) {
         return orderService.placeOrder(orderDto);
     }
 
