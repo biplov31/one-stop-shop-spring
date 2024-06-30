@@ -4,6 +4,7 @@ import com.bip.OneStopShop.exceptions.OrderNotFoundException;
 import com.bip.OneStopShop.exceptions.UserNotFoundException;
 import com.bip.OneStopShop.models.Order;
 import com.bip.OneStopShop.models.OrderItem;
+import com.bip.OneStopShop.models.Product;
 import com.bip.OneStopShop.models.User;
 import com.bip.OneStopShop.models.dtos.*;
 import com.bip.OneStopShop.repositories.OrderRepository;
@@ -14,6 +15,7 @@ import com.bip.OneStopShop.services.mappers.UserMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -37,36 +39,12 @@ public class OrderServiceImpl implements OrderService {
 
         List<OrderItemResponseDto> orderItemResponseDtoList = orderRepository.findAllByUserIdOrderByCreatedAtDesc(userId);
         double totalCost = 0.0;
-        // List<OrderItemResponseDto> orderItemResponseDtoList = new ArrayList<>();
         for(OrderItemResponseDto orderItem : orderItemResponseDtoList) {
             totalCost += orderItem.getPrice() * orderItem.getQuantity();
         }
 
         return new OrderListDto(userResponseDto, orderItemResponseDtoList, totalCost);
     }
-
-    // N+1 query problem
-    // public OrderListDto findAllOrders(Integer userId) {
-    //     User user = userRepository.findById(userId)
-    //             .orElseThrow(() -> new UserNotFoundException("User does not exist."));
-    //     UserResponseDto userResponseDto = userMapper.convertUserToUserResponseDto(user);
-    //
-    //     List<OrderItem> orderItems = orderRepository.findAllByUserIdOrderByCreatedAtDesc(userId);
-    //     double totalCost = 0.0;
-    //     List<OrderItemResponseDto> orderItemResponseDtoList = new ArrayList<>();
-    //     for(OrderItem orderItem : orderItems) {
-    //         Product product = productRepository.findById(orderItem.getProductId())
-    //                 .orElseThrow(() -> new ProductNotFoundException("Product does not exist."));
-    //         ProductDto productDto = productMapper.convertProductToProductDto(product);
-    //
-    //         totalCost += product.getPrice() * orderItem.getQuantity();
-    //
-    //         OrderItemResponseDto orderItemResponseDto = new OrderItemResponseDto(productDto, orderItem.getQuantity());
-    //         orderItemResponseDtoList.add(orderItemResponseDto);
-    //     };
-    //
-    //     return new OrderListDto(userResponseDto, orderItemResponseDtoList, totalCost);
-    // }
 
     public OrderListDto findOrderById(Integer id) {
         List<OrderItemResponseDto> orderItemResponseDtoList = orderRepository.findByOrderId(id);
@@ -92,7 +70,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public OrderListDto placeOrder(OrderDto orderDto) {
+        double totalCost = 0.0;
+        Set<OrderItemDto> orderItems = orderDto.getOrderItems();
+        for(OrderItemDto orderItem : orderItems) {
+            totalCost += orderItem.getPrice() * orderItem.getQuantity();
+        }
+
         Order order = orderMapper.convertOrderDtoToOrder(orderDto);
+        order.setTotalCost(totalCost);
         Order placedOrder = orderRepository.save(order);
 
         return findOrderById(placedOrder.getId());

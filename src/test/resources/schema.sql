@@ -27,22 +27,31 @@ create table if not exists "review" (
     product integer not null references "product"(id) on delete cascade
 );
 
--- Order table
-drop table if exists "user_order";
-create table if not exists "user_order" (
-    id serial primary key,
-    user_id integer references "user_account"(id),
-    product_id integer references "product"(id),
-    created_at timestamp default current_timestamp,
-    quantity integer default 1 not null
-);
-
 -- Cart table
 drop table if exists "cart";
 create table if not exists "cart" (
     cart_item_id serial primary key,
     user_id integer not null references "user_account"(id) on delete cascade,
     product_id integer not null references "product"(id),
+    quantity integer default 1 not null
+);
+
+-- Order table
+drop table if exists "user_order";
+create table if not exists "user_order" (
+    id serial primary key,
+    user_id integer references "user_account"(id),
+    created_at timestamp default current_timestamp,
+    total_cost numeric not null default 0
+);
+
+-- Order Item table
+drop table if exists "order_item";
+create table if not exists "order_item" (
+    id serial primary key,
+    "order_id" integer not null references "user_order"(id) on delete cascade,
+    product_id integer not null references "product"(id),
+    price numeric not null,
     quantity integer default 1 not null
 );
 

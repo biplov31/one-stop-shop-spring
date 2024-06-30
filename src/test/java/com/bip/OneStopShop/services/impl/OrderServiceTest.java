@@ -1,19 +1,13 @@
 package com.bip.OneStopShop.services.impl;
 
-import com.bip.OneStopShop.models.OrderItem;
-import com.bip.OneStopShop.models.Product;
-import com.bip.OneStopShop.models.ProductCategory;
-import com.bip.OneStopShop.models.User;
-import com.bip.OneStopShop.models.dtos.OrderItemDto;
-import com.bip.OneStopShop.models.dtos.OrderItemResponseDto;
-import com.bip.OneStopShop.models.dtos.OrderListDto;
-import com.bip.OneStopShop.models.dtos.UserResponseDto;
+import com.bip.OneStopShop.exceptions.OrderNotFoundException;
+import com.bip.OneStopShop.models.*;
+import com.bip.OneStopShop.models.dtos.*;
 import com.bip.OneStopShop.repositories.OrderRepository;
 import com.bip.OneStopShop.repositories.ProductRepository;
 import com.bip.OneStopShop.repositories.UserRepository;
 import com.bip.OneStopShop.services.mappers.OrderMapper;
 import com.bip.OneStopShop.services.mappers.UserMapper;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,11 +15,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -52,7 +46,11 @@ public class OrderServiceTest {
     OrderItemDto orderItemOneDto;
     OrderItemResponseDto orderItemOneResponseDto;
     OrderItem orderItemTwo;
+    Set<OrderItem> orderItems = new HashSet<>();
     OrderItemDto orderItemTwoDto;
+    Set<OrderItemDto> orderItemDtos = new HashSet<>();
+    Order order;
+    OrderDto orderDto;
     OrderItemResponseDto orderItemTwoResponseDto;
     List<OrderItemResponseDto> orderItemResponseDtoList = new ArrayList<>();
     Double totalCost;
@@ -67,20 +65,28 @@ public class OrderServiceTest {
         productOne = new Product("Product 1", "This is Product 1.", 25.0, ProductCategory.MENS_CLOTHING.name());
         productRepository.save(productOne);
 
-        productTwo = new Product("Product 2", "This is Product 2.", 25.0, ProductCategory.MENS_CLOTHING.name());
+        productTwo = new Product("Product 2", "This is Product 2.", 30.0, ProductCategory.MENS_CLOTHING.name());
         productRepository.save(productTwo);
 
-        // orderItemOne = new OrderItem(user.getId(), productOne.getId(), 5);
-        // orderItemOneDto = new OrderItemDto(orderItemOne.getUserId(), orderItemOne.getProductId(), orderItemOne.getQuantity(), orderItemOne.getCreatedAt());
-        // orderItemTwo = new OrderItem(user.getId(), productTwo.getId(), 10);
-        // orderItemTwoDto = new OrderItemDto(orderItemTwo.getUserId(), orderItemTwo.getProductId(), orderItemTwo.getQuantity(), orderItemTwo.getCreatedAt());
+        orderItemOne = new OrderItem(productOne.getId(), productOne.getPrice(), 10);
+        orderItems.add(orderItemOne);
+        orderItemOneDto = new OrderItemDto(orderItemOne.getProductId(), orderItemOne.getPrice(), orderItemOne.getQuantity());
+        orderItemDtos.add(orderItemOneDto);
+        orderItemTwo = new OrderItem(productTwo.getId(), productTwo.getPrice(), 5);
+        orderItems.add(orderItemTwo);
+        orderItemTwoDto = new OrderItemDto(orderItemTwo.getProductId(), orderItemTwo.getPrice(), orderItemTwo.getQuantity());
+        orderItemDtos.add(orderItemTwoDto);
 
-        // orderItemOneResponseDto = new OrderItemResponseDto(productOne.getTitle(), productOne.getDescription(), productOne.getPrice(), ProductCategory.valueOf(productOne.getCategory()), orderItemOne.getQuantity(), orderItemOne.getCreatedAt());
-        // orderItemTwoResponseDto = new OrderItemResponseDto(productTwo.getTitle(), productTwo.getDescription(), productTwo.getPrice(), ProductCategory.valueOf(productTwo.getCategory()), orderItemTwo.getQuantity(), orderItemTwo.getCreatedAt());
+        totalCost = orderItemOneDto.getQuantity() * orderItemOneDto.getPrice() + orderItemTwoDto.getQuantity() * orderItemTwoDto.getPrice();
+
+        order = new Order(user.getId(), orderItems, totalCost);
+        orderDto = new OrderDto(order.getUserId(), orderItemDtos, order.getTotalCost());
+
+        orderItemOneResponseDto = new OrderItemResponseDto(productOne.getTitle(), productOne.getDescription(), productOne.getPrice(), ProductCategory.valueOf(productOne.getCategory()), orderItemOne.getQuantity(), order.getCreatedAt());
+        orderItemTwoResponseDto = new OrderItemResponseDto(productTwo.getTitle(), productTwo.getDescription(), productTwo.getPrice(), ProductCategory.valueOf(productTwo.getCategory()), orderItemTwo.getQuantity(), order.getCreatedAt());
 
         orderItemResponseDtoList.add(orderItemOneResponseDto);
         orderItemResponseDtoList.add(orderItemTwoResponseDto);
-        totalCost = productOne.getPrice() * orderItemOne.getQuantity() + productTwo.getPrice() * orderItemTwo.getQuantity();
         orderListDto = new OrderListDto(userResponseDto, orderItemResponseDtoList, totalCost);
     }
 
@@ -103,7 +109,42 @@ public class OrderServiceTest {
 
     @Test
     void givenOrderId_ShouldFindThatOrder() {
-        // when(orderRepository.findByOrderId(orderItemOne.getId())).thenReturn();
+        when(orderRepository.findByOrderId(orderItemOne.getId())).thenReturn(orderItemResponseDtoList);
+
+        OrderListDto orderListDto = orderService.findOrderById(order.getId());
+
+        assertThat(orderListDto).isNotNull();
+        assertThat(orderListDto.getOrderItemResponseDtoList().size()).isEqualTo(orderItemResponseDtoList.size());
+        assertThat(orderListDto.getCost()).isEqualTo(totalCost);
+    }
+
+    @Test
+    void givenOrderDto_ShouldCreateOrder() {
+        when(orderMapper.convertOrderDtoToOrder(orderDto)).thenReturn(order);
+        when(orderRepository.findByOrderId(order.getId())).thenReturn(orderItemResponseDtoList);
+        when(orderService.findOrderById(order.getId())).thenReturn(orderListDto);
+
+        OrderListDto orderListDto = orderService.placeOrder(orderDto);
+
+        verify(orderRepository).save(order);
+    }
+
+    @Test
+    void givenOrderId_ShouldDeleteOrderIfFound() {
+        when(orderRepository.existsById(order.getId())).thenReturn(true);
+
+        orderService.cancelOrder(order.getId());
+
+        verify(orderRepository).deleteById(order.getId());
+    }
+
+    @Test
+    void givenOrderIdToDelete_ShouldThrowExceptionIfNotFound() {
+        when(orderRepository.existsById(999)).thenReturn(false);
+
+        assertThatThrownBy(() -> orderService.cancelOrder(999))
+                .isInstanceOf(OrderNotFoundException.class)
+                .hasMessageContaining("Order does not exist.");
     }
 
 }

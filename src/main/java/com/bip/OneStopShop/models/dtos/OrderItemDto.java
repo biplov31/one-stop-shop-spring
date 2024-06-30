@@ -1,30 +1,18 @@
 package com.bip.OneStopShop.models.dtos;
 
-import java.time.LocalDateTime;
-
 public class OrderItemDto {
 
-    private Integer userId;
     private Integer productId;
+    private Double price;
     private Integer quantity;
-    private LocalDateTime createdAt;
 
     public OrderItemDto() {
     }
 
-    public OrderItemDto(Integer userId, Integer productId, Integer quantity, LocalDateTime createdAt) {
-        this.userId = userId;
+    public OrderItemDto(Integer productId, Double price, Integer quantity) {
         this.productId = productId;
+        this.price = price;
         this.quantity = quantity;
-        this.createdAt = createdAt;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
     }
 
     public Integer getProductId() {
@@ -35,6 +23,14 @@ public class OrderItemDto {
         this.productId = productId;
     }
 
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
     public Integer getQuantity() {
         return quantity;
     }
@@ -43,11 +39,4 @@ public class OrderItemDto {
         this.quantity = quantity;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
 }

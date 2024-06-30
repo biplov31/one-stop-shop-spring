@@ -2,6 +2,7 @@ package com.bip.OneStopShop.models;
 
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
@@ -15,21 +16,28 @@ public class Order {
     private Integer id;
     @NotNull
     private Integer userId;
+    @MappedCollection(idColumn = "order_id")
     private Set<OrderItem> orderItems = new HashSet<>();
+    private Double totalCost;
     private LocalDateTime createdAt;
 
     public Order() {
         this.createdAt = LocalDateTime.now();
     }
 
-    public Order(Integer userId, Set<OrderItem> orderItems) {
+    public Order(Integer userId, Set<OrderItem> orderItems, Double totalCost) {
         this.userId = userId;
         orderItems.forEach(this::addOrderItem);
+        this.totalCost = totalCost;
         this.createdAt = LocalDateTime.now();
     }
 
     public Integer getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Integer getUserId() {
@@ -42,7 +50,7 @@ public class Order {
 
     public void addOrderItem(OrderItem orderItem) {
         orderItems.add(orderItem);
-        orderItem.order = this;
+        orderItem.orderId = this;
     }
 
     public Set<OrderItem> getOrderItems() {
@@ -53,4 +61,19 @@ public class Order {
         items.forEach(orderItem -> this.addOrderItem(orderItem));
     }
 
+    public Double getTotalCost() {
+        return totalCost;
+    }
+
+    public void setTotalCost(Double cost) {
+        this.totalCost = cost;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 }

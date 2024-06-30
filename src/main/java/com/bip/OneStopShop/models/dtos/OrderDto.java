@@ -6,14 +6,16 @@ import java.util.Set;
 public class OrderDto {
 
     private Integer userId;
-    private Set<OrderItemDto> orderItemDtos = new HashSet<>();
+    private Set<OrderItemDto> orderItems = new HashSet<>();
+    private Double totalCost;
 
     public OrderDto() {
     }
 
-    public OrderDto(Integer userId, Set<OrderItemDto> orderItemDtos) {
+    public OrderDto(Integer userId, Set<OrderItemDto> orderItems, Double totalCost) {
         this.userId = userId;
-        this.orderItemDtos = orderItemDtos;
+        this.orderItems = orderItems;
+        this.totalCost = totalCost;
     }
 
     public Integer getUserId() {
@@ -24,12 +26,20 @@ public class OrderDto {
         this.userId = userId;
     }
 
-    public Set<OrderItemDto> getOrderItemDtos() {
-        return orderItemDtos;
+    public Set<OrderItemDto> getOrderItems() {
+        return orderItems;
     }
 
-    public void setOrderItemDtos(Set<OrderItemDto> orderItemDtos) {
-        this.orderItemDtos = orderItemDtos;
+    public void setOrderItems(Set<OrderItemDto> orderItems) {
+        this.orderItems = orderItems;
+    }
+
+    public Double getTotalCost() {
+        return totalCost;
+    }
+
+    public void setTotalCost(Double totalCost) {
+        this.totalCost = totalCost;
     }
 
 }

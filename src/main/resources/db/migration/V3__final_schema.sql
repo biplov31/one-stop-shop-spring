@@ -1,5 +1,7 @@
-alter table user_order drop column product_id;
-alter table user_order drop column quantity;
+alter table user_order
+    drop column if exists product_id,
+    drop column if exists quantity,
+    add column total_cost numeric not null default 0;
 
 -- Order table
 --create table if not exists user_order (
@@ -12,7 +14,8 @@ alter table user_order drop column quantity;
 
 create table if not exists order_item (
     id serial primary key,
-    order_id integer not null references user_order(id),
+    order_id integer not null references user_order(id) on delete cascade,
     product_id integer not null references product(id),
+    price numeric not null,
     quantity integer default 1 not null
 );

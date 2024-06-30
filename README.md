@@ -17,3 +17,90 @@ This project aims to become a fullstack e-commerce application with a React fron
 7. Write documentation using Swagger API.
 8. Set up CI/CD with GitHub Actions or Jenkins.
 9. Containerize the application using Docker, deploy the image to Azure free-tier.
+
+### Major API endpoints:
+#### Accessing the cart: */api/v1/cart/1*
+```json
+{
+  "cartItemResponseDtoList": [
+    {
+      "productDto": {
+        "title": "Kathmandu jacket",
+        "description": "Lightweight, water-resistant jacket for summer.",
+        "price": 60,
+        "category": "MENS_CLOTHING",
+        "review": null
+      },
+      "quantity": 3
+    },
+    {
+      "productDto": {
+        "title": "Yonex Shoes",
+        "description": "Teal-colored elegant looking Yonex shoes.",
+        "price": 120,
+        "category": "MENS_CLOTHING",
+        "review": null
+      },
+      "quantity": 4
+    }
+  ],
+  "cost": 660
+}
+```
+
+#### Placing an order: */api/v1/order*
+```json
+{
+  "userId": 1,
+  "orderItems": [
+    {
+      "productId": 3,
+      "price": 45.99,
+      "quantity": 5
+    },
+    {
+      "productId": 2,
+      "price": 60,
+      "quantity": 10
+    }
+  ]
+}
+```
+
+#### Fetching all the orders for a user: */api/v1/order/user/1*
+```json
+{
+  "userResponseDto": {
+    "firstname": "June",
+    "lastname": "Doe",
+    "email": "june@gmail.com"
+  },
+  "orderItemResponseDtoList": [
+    {
+      "title": "Yonex Shoes",
+      "description": "Teal-colored elegant looking Yonex shoes.",
+      "price": 120,
+      "category": "MENS_CLOTHING",
+      "quantity": 2,
+      "createdAt": "2024-06-29T19:48:38.02948"
+    },
+    {
+      "title": "Kathmandu jacket",
+      "description": "Lightweight, water-resistant jacket for summer.",
+      "price": 60,
+      "category": "MENS_CLOTHING",
+      "quantity": 10,
+      "createdAt": "2024-06-29T19:46:15.480662"
+    },
+    {
+      "title": "Levi's jeans",
+      "description": "Simple and elegant Levi's pants.",
+      "price": 45.99,
+      "category": "MENS_CLOTHING",
+      "quantity": 5,
+      "createdAt": "2024-06-29T19:46:15.480662"
+    }
+  ],
+  "cost": 1069.95
+}
+```

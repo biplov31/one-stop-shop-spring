@@ -1,9 +1,6 @@
 package com.bip.OneStopShop.repositories;
 
-import com.bip.OneStopShop.models.OrderItem;
-import com.bip.OneStopShop.models.Product;
-import com.bip.OneStopShop.models.ProductCategory;
-import com.bip.OneStopShop.models.User;
+import com.bip.OneStopShop.models.*;
 import com.bip.OneStopShop.models.dtos.OrderItemResponseDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +11,9 @@ import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,6 +33,9 @@ public class OrderRepositoryTest {
     private Product productTwo;
     private OrderItem orderItemOne;
     private OrderItem orderItemTwo;
+    private Set<OrderItem> orderItems = new HashSet<>();
+    private Order order;
+    private Double totalCost;
 
     @BeforeEach
     void init() {
@@ -43,27 +45,25 @@ public class OrderRepositoryTest {
         productOne = new Product("Product 1", "This is Product 1.", 25.0, ProductCategory.MENS_CLOTHING.name());
         productRepository.save(productOne);
 
-        productTwo = new Product("Product 2", "This is Product 2.", 25.0, ProductCategory.MENS_CLOTHING.name());
+        productTwo = new Product("Product 2", "This is Product 2.", 30.0, ProductCategory.MENS_CLOTHING.name());
         productRepository.save(productTwo);
 
-        orderItemOne = new OrderItem();
-        // orderItemOne.setUserId(userOne.getId());
-        orderItemOne.setProductId(productOne.getId());
-        orderItemOne.setQuantity(5);
+        orderItemOne = new OrderItem(productOne.getId(), productOne.getPrice(), 10);
+        orderItems.add(orderItemOne);
+        orderItemTwo = new OrderItem(productTwo.getId(), productTwo.getPrice(), 5);
+        orderItems.add(orderItemTwo);
 
-        orderItemTwo = new OrderItem();
-        // orderItemTwo.setUserId(userOne.getId());
-        orderItemTwo.setProductId(productTwo.getId());
-        orderItemTwo.setQuantity(10);
+        totalCost = orderItemOne.getQuantity() * orderItemOne.getPrice() + orderItemTwo.getQuantity() * orderItemTwo.getPrice();
 
-        orderRepository.save(orderItemOne);
-        orderRepository.save(orderItemTwo);
+        order = new Order(userOne.getId(), orderItems, totalCost);
+
+        orderRepository.save(order);
     }
 
     @Test
     @DisplayName("This test should find a specific order by its ID.")
     void shouldFindByOrderId() {
-        List<OrderItemResponseDto> orderItemResponseDtoList = orderRepository.findByOrderId(orderItemOne.getId());
+        List<OrderItemResponseDto> orderItemResponseDtoList = orderRepository.findByOrderId(order.getId());
 
         assertThat(orderItemResponseDtoList).isNotNull();
         assertThat(orderItemResponseDtoList.get(0).getTitle()).isEqualTo(productOne.getTitle());
@@ -75,8 +75,8 @@ public class OrderRepositoryTest {
         List<OrderItemResponseDto> orderItemResponseDtoList = orderRepository.findAllByUserIdOrderByCreatedAtDesc(userOne.getId());
 
         assertThat(orderItemResponseDtoList.size()).isEqualTo(2);
-        assertThat(orderItemResponseDtoList.get(0).getTitle()).isEqualTo(productOne.getTitle());
-        assertThat(orderItemResponseDtoList.get(1).getTitle()).isEqualTo(productTwo.getTitle());
+        assertThat(orderItemResponseDtoList.get(0).getTitle()).isEqualTo(productTwo.getTitle());
+        assertThat(orderItemResponseDtoList.get(1).getTitle()).isEqualTo(productOne.getTitle());
     }
 
 }

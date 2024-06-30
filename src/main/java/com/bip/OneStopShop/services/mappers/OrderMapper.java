@@ -15,10 +15,11 @@ public class OrderMapper {
     public Order convertOrderDtoToOrder(OrderDto orderDto) {
         Order order = new Order();
         order.setUserId(orderDto.getUserId());
-        Set<OrderItem> orderItems = orderDto.getOrderItemDtos().stream()
+        Set<OrderItem> orderItems = orderDto.getOrderItems().stream()
                         .map(this::convertOrderItemDtoToOrderItem)
                         .collect(Collectors.toSet());
         order.setOrderItems(orderItems);
+        // order.setTotalCost(orderDto.getTotalCost());
 
         return order;
     }
@@ -26,6 +27,7 @@ public class OrderMapper {
     public OrderItem convertOrderItemDtoToOrderItem(OrderItemDto orderItemDto) {
         OrderItem orderItem = new OrderItem();
         orderItem.setProductId(orderItemDto.getProductId());
+        orderItem.setPrice(orderItemDto.getPrice());
         orderItem.setQuantity(orderItemDto.getQuantity());
 
         return orderItem;
@@ -34,6 +36,7 @@ public class OrderMapper {
     public OrderItemDto convertOrderItemToOrderItemDto(OrderItem orderItem) {
         OrderItemDto orderItemDto = new OrderItemDto();
         orderItemDto.setProductId(orderItem.getProductId());
+        orderItemDto.setPrice(orderItem.getPrice());
         orderItemDto.setQuantity(orderItem.getQuantity());
 
         return orderItemDto;
